@@ -1,4 +1,4 @@
-﻿using ExpenseControl.WebApi.Application.Services;
+﻿using ExpenseControl.WebApi.Application.Services.Interfaces;
 using ExpenseControl.WebApi.Endpoints.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace ExpenseControl.WebApi.Endpoints.Controllers
 {
     [ApiController]
     [Route("api/transaction")]
-    public class TransactionController(TransactionService service) : ControllerBase
+    public class TransactionController(ITransactionService service) : ControllerBase
     {
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)

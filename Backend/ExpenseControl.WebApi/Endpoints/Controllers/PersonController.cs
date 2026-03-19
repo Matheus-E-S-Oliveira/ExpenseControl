@@ -1,4 +1,4 @@
-﻿using ExpenseControl.WebApi.Application.Services;
+﻿using ExpenseControl.WebApi.Application.Services.Interfaces;
 using ExpenseControl.WebApi.Endpoints.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace ExpenseControl.WebApi.Endpoints.Controllers
 {
     [ApiController]
     [Route("api/person")]
-    public class PersonController(PersonService service) : ControllerBase
+    public class PersonController(IPersonService service) : ControllerBase
     {
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
