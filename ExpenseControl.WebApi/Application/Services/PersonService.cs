@@ -1,11 +1,11 @@
 ﻿using ExpenseControl.WebApi.Application.Services.Interfaces;
+using ExpenseControl.WebApi.Domain.IRepositories;
 using ExpenseControl.WebApi.Endpoints.Requests;
 using ExpenseControl.WebApi.Endpoints.Responses;
-using ExpenseControl.WebApi.Infraestructure.Repositories;
 
 namespace ExpenseControl.WebApi.Application.Services
 {
-    public class PersonService(PersonRepository repository) : IPersonService
+    public class PersonService(IPersonRepository repository) : IPersonService
     {
         public async Task<ApiResponse<PersonResponse>> CreateAsync(PersonRequest request)
         {

@@ -1,11 +1,11 @@
 ﻿using ExpenseControl.WebApi.Application.Services.Interfaces;
+using ExpenseControl.WebApi.Domain.IRepositories;
 using ExpenseControl.WebApi.Endpoints.Requests;
 using ExpenseControl.WebApi.Endpoints.Responses;
-using ExpenseControl.WebApi.Infraestructure.Repositories;
 
 namespace ExpenseControl.WebApi.Application.Services
 {
-    public class CategoryService(CategoryRepository repository) : ICategoryService
+    public class CategoryService(ICategoryRepository repository) : ICategoryService
     {
         public async Task<ApiResponse<CategoryResponse>> CreateAsync(CategoryRequest request)
         {

@@ -1,12 +1,15 @@
 ﻿using ExpenseControl.WebApi.Application.Services.Interfaces;
 using ExpenseControl.WebApi.Domain.Enums;
+using ExpenseControl.WebApi.Domain.IRepositories;
 using ExpenseControl.WebApi.Endpoints.Requests;
 using ExpenseControl.WebApi.Endpoints.Responses;
-using ExpenseControl.WebApi.Infraestructure.Repositories;
 
 namespace ExpenseControl.WebApi.Application.Services
 {
-    public class TransactionService(TransactionRepository repository, PersonRepository personRepository, CategoryRepository categoryRepository) : ITransactionService
+    public class TransactionService(
+        ITransactionRepository repository, 
+        IPersonRepository personRepository, 
+        ICategoryRepository categoryRepository) : ITransactionService
     {
         public async Task<ApiResponse<TransactionResponse>> CreateAsync(TransactionRequest request)
         {
