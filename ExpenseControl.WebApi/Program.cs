@@ -1,4 +1,12 @@
+using ExpenseControl.WebApi.Application.Services;
+using ExpenseControl.WebApi.Application.Services.Interfaces;
+using ExpenseControl.WebApi.Application.Validators;
+using ExpenseControl.WebApi.Domain.IRepositories;
+using ExpenseControl.WebApi.Endpoints.Responses;
 using ExpenseControl.WebApi.Infraestructure.Data;
+using ExpenseControl.WebApi.Infraestructure.Repositories;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseControl.WebApi
@@ -17,6 +25,36 @@ namespace ExpenseControl.WebApi
 
             builder.Services.AddDbContext<ExpenseControlContext>(option =>
                 option.UseMySQL(connectionString));
+
+            builder.Services.AddValidatorsFromAssemblyContaining<PersonValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<TransactionValidator>();
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)
+                        .ToList();
+
+                    var response = ApiResponse<object>.ValidationResponse(
+                        statusCode: StatusCodes.Status400BadRequest,
+                        errors: errors);
+
+                    return new BadRequestObjectResult(response);
+                };
+            });
+
+            builder.Services.AddScoped<IPersonService, PersonService>();
+            builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+            builder.Services.AddScoped<ITransactionService, TransactionService>();
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             var app = builder.Build();
 

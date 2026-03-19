@@ -5,11 +5,11 @@ namespace ExpenseControl.WebApi.Infraestructure.Data
 {
     public class ExpenseControlContext(DbContextOptions<ExpenseControlContext> options) : DbContext(options)
     {
-        DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
-        DbSet<Person> Persons { get; set; }
+        public DbSet<Person> Persons { get; set; }
 
-        DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

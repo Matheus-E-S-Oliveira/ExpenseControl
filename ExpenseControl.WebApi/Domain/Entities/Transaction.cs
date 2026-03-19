@@ -23,14 +23,15 @@ namespace ExpenseControl.WebApi.Domain.Entities
         [JsonIgnore]
         public Category? Category { get; private set; }
 
-        public static Transaction Create(Guid personId, Guid categoryId, string description, decimal value)
+        public static Transaction Create(Guid personId, Guid categoryId, string description, decimal value, TransactionType type)
         {
             return new Transaction
             {
                 PersonId = personId,
                 CategoryId = categoryId,
                 Description = description,
-                Value = value
+                Value = value,
+                Type = type
             };
         }
     }
