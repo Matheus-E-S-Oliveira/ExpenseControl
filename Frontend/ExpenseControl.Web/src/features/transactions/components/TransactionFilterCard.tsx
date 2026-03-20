@@ -1,20 +1,31 @@
 import { useState } from "react";
-import { FiPlus, FiSearch, FiX } from "react-icons/fi";
+import { FiSearch, FiX, FiPlus } from "react-icons/fi";
 
 type Props = {
-  onSearch: (filters: { name: string; age: string }) => void;
+  onSearch: (filters: {
+    description: string;
+    type: number | "";
+    personName: string;
+    category: string;
+  }) => void;
   onClear: () => void;
   onNew: () => void;
 };
 
-export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+export default function TransactionFilterCard({ onSearch, onClear, onNew }: Props) {
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState<number | "">("");
+  const [personName, setPersonName] = useState("");
+  const [category, setCategory] = useState("");
 
-  const handleSearch = () => onSearch({ name, age });
+  const handleSearch = () =>
+    onSearch({ description, type, personName, category });
+
   const handleClear = () => {
-    setName("");
-    setAge("");
+    setDescription("");
+    setType("");
+    setPersonName("");
+    setCategory("");
     onClear();
   };
 
@@ -34,33 +45,50 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
         boxSizing: 'border-box'
       }}
     >
-      <h2 style={{ margin: 0 }}>Lista de Pessoas</h2>
+      <h2 style={{ margin: 0 }}>Lista de Transações</h2>
+
+      {/* Campos */}
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={{
-            flex: 1,
-            padding: "8px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
+          placeholder="Descrição"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          style={{ flex: 1, padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
         />
+
         <input
-          type="number"
-          placeholder="Idade"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
+          placeholder="Pessoa"
+          value={personName}
+          onChange={(e) => setPersonName(e.target.value)}
+          style={{ flex: 1, padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
+        />
+
+        <input
+          placeholder="Categoria"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={{ flex: 1, padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
+        />
+
+        <select
+          value={type}
+          onChange={(e) =>
+            setType(e.target.value === "" ? "" : Number(e.target.value))
+          }
           style={{
-            width: "400px",
+            width: "200px",
             padding: "8px",
             borderRadius: "5px",
             border: "1px solid #ccc",
           }}
-        />
+        >
+          <option value="">Todos os tipos</option>
+          <option value={1}>Despesa</option>
+          <option value={2}>Receita</option>
+        </select>
       </div>
+
+      {/* Botões */}
       <div
         style={{
           display: "flex",
@@ -77,15 +105,14 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
             backgroundColor: "#0080FF",
             color: "#fff",
             border: "none",
-            alignItems: "center",
             display: "flex",
             gap: "5px",
-            fontSize: "15px",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
         >
           <FiSearch /> Buscar
         </button>
+
         <button
           onClick={handleClear}
           style={{
@@ -94,15 +121,14 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
             backgroundColor: "#aaa",
             color: "#fff",
             border: "none",
-            alignItems: "center",
             display: "flex",
             gap: "5px",
-            fontSize: "15px",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
         >
           <FiX /> Limpar
         </button>
+
         <button
           onClick={onNew}
           style={{
@@ -111,14 +137,12 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
             backgroundColor: "#00C853",
             color: "#fff",
             border: "none",
-            alignItems: "center",
             display: "flex",
             gap: "5px",
-            fontSize: "15px",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
         >
-          <FiPlus /> Novo
+          <FiPlus /> Nova
         </button>
       </div>
     </div>

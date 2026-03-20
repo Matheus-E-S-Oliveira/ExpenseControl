@@ -25,7 +25,10 @@ namespace ExpenseControl.WebApi.Infraestructure.Repositories
 
         public async Task<IEnumerable<Transaction>> GetAllAsync()
         {
-            return await context.Transactions.ToListAsync();
+            return await context.Transactions
+                .Include(x => x.Category)
+                .Include(x => x.Person)
+                .ToListAsync();
         }
 
         public async Task<Transaction?> GetByIdAsync(Guid id)

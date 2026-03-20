@@ -1,44 +1,52 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../services/categoryService";
-import CategoryCard from "../components/CategoryCard";
-import CategoryFilterCard from "../components/CategoryFilterCard";
 import MainLayout from "../../../layouts/MainLayout";
-import CategoryFormModal from "../components/CategoryFormModal";
 import ModalGlobal from "../../../components/ModalGlobal";
-import type { Category } from "../types/category";
+import TransactionCard from "../components/TransactionCard";
+import TransactionFilterCard from "../components/TransactionFilterCard";
+import TransactionFormModal from "../components/TransactionFormModal";
+import { getTransactions } from "../services/transactionService";
+import type { Transaction } from "../types/transaction";
 
-export default function CategoriesListPage() {
-    const [categories, setCategories] = useState<Category[]>([]);
+
+export default function TransactionsListPage() {
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [showFormModal, setShowFormModal] = useState(false);
     const [message, setMessage] = useState("");
     const [showMessage, setShowMessage] = useState(false);
     const [success, setSuccess] = useState(true);
     const [hasFilter, setHasFilter] = useState(false);
 
-    const fetchCategories = async (filters?: { description: string; purpose: number | "" }) => {
-        const response = await getCategories();
+    const fetchTransactions = async (filters?: {
+        description: string;
+        type: number | "";
+        personName: string;
+        category: string;
+    }) => {
+        const response = await getTransactions();
         let filtered = response.data;
 
         setHasFilter(!!filters);
 
         if (filters) {
-            filtered = response.data.filter(
-                (c: Category) =>
-                    (!filters.description ||
-                        c.description.toLowerCase().includes(filters.description.toLowerCase())) &&
-                    (!filters.purpose || c.purpose === filters.purpose)
+            filtered = response.data.filter((t: Transaction) =>
+                (!filters.description ||
+                    t.description.toLowerCase().includes(filters.description.trim().toLowerCase())) &&
+
+                (!filters.type || t.type === filters.type) &&
+
+                (!filters.personName ||
+                    t.person?.name?.toLowerCase().includes(filters.personName.toLowerCase())) &&
+
+                (!filters.category ||
+                    t.category?.description?.toLowerCase().includes(filters.category.toLowerCase()))
             );
         }
 
-        setCategories(filtered);
-    };
-
-    const handleNew = () => {
-        setShowFormModal(true);
+        setTransactions(filtered);
     };
 
     useEffect(() => {
-        fetchCategories();
+        fetchTransactions();
     }, []);
 
     return (
@@ -52,19 +60,20 @@ export default function CategoriesListPage() {
                     width: "100%",
                 }}
             >
-                <CategoryFilterCard
-                    onSearch={fetchCategories}
-                    onClear={() => fetchCategories()}
-                    onNew={handleNew}
+
+                <TransactionFilterCard
+                    onSearch={fetchTransactions}
+                    onClear={() => fetchTransactions()}
+                    onNew={() => setShowFormModal(true)}
                 />
 
                 {showFormModal && (
-                    <CategoryFormModal
+                    <TransactionFormModal
                         onClose={() => setShowFormModal(false)}
                         onSuccess={() => {
-                            fetchCategories();
+                            fetchTransactions();
                             setShowFormModal(false);
-                            setMessage("Categoria cadastrada com sucesso!");
+                            setMessage("Transação cadastrada com sucesso!");
                             setSuccess(true);
                             setShowMessage(true);
                         }}
@@ -80,7 +89,7 @@ export default function CategoriesListPage() {
                         width: "100%",
                     }}
                 >
-                    {categories.length === 0 ? (
+                    {transactions.length === 0 ? (
                         <div
                             style={{
                                 width: "100%",
@@ -91,12 +100,12 @@ export default function CategoriesListPage() {
                             }}
                         >
                             {hasFilter
-                                ? "Nenhuma categoria encontrada com esses filtros."
-                                : "Nenhuma categoria cadastrada."}
+                                ? "Nenhuma transação encontrada com esses filtros."
+                                : "Nenhuma transação cadastrada."}
                         </div>
                     ) : (
-                        categories.map((c) => (
-                            <CategoryCard key={c.id} {...c} />
+                        transactions.map((t) => (
+                            <TransactionCard key={t.id} {...t} />
                         ))
                     )}
                 </div>

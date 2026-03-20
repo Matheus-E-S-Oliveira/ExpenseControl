@@ -14,25 +14,68 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [success, setSuccess] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<any>({});
 
   const handleSubmit = async () => {
+    setLoading(true);
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      setLoading(false);
+      return;
+    }
+
     try {
+      let responseMessage = "";
+
       if (person) {
-        const response = await updatePerson(person.id, { name, age: Number(age) });
-        setMessage(response.message || "Pessoa atualizada com sucesso!");
+        const response = await updatePerson(person.id, {
+          name,
+          age: Number(age),
+        });
+        responseMessage = response.message || "Pessoa atualizada com sucesso!";
       } else {
-        const response = await createPerson({ name, age: Number(age) });
-        setMessage(response.message || "Pessoa cadastrada com sucesso!");
+        const response = await createPerson({
+          name,
+          age: Number(age),
+        });
+        responseMessage = response.message || "Pessoa cadastrada com sucesso!";
       }
+
+      setMessage(responseMessage);
       setSuccess(true);
       setShowMessage(true);
-      onSuccess();
-      onClose();
+
     } catch (error: any) {
-      setMessage(error?.response?.data?.message || "Erro ao cadastrar!");
+      setMessage(error?.response?.data?.message || "Erro ao salvar!");
       setSuccess(false);
       setShowMessage(true);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const validateForm = () => {
+    const newErrors: any = {};
+
+    if (!name.trim()) {
+      newErrors.name = "Nome é obrigatório";
+    } else if (name.length > 200) {
+      newErrors.name = "Máximo de 200 caracteres";
+    }
+
+    if (!age) {
+      newErrors.age = "Idade é obrigatória";
+    } else if (Number(age) <= 0) {
+      newErrors.age = "Idade deve ser maior que zero";
+    } else if (Number(age) > 120) {
+      newErrors.age = "Idade máxima permitida é 120";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   return (
@@ -59,26 +102,58 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
             minWidth: "400px",
           }}
         >
-          <h2>Cadastrar Pessoa</h2>
+          <h2>{person ? "Editar Pessoa" : "Cadastrar Pessoa"}</h2>
           <div style={{ display: "flex", flexDirection: "column" }}>
+            <span style={{ fontSize: "11px", color: "#999" }}>
+              {name.length}/400
+            </span>
             <input
               type="text"
               placeholder="Nome"
+              maxLength={200}
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              style={{ width: "94%", padding: "8px", marginBottom: "10px" }}
+              onChange={(e) => {
+                setName(e.target.value);
+                setErrors((prev: any) => ({ ...prev, name: "" }));
+              }}
+              style={{
+                width: "94%",
+                padding: "8px",
+                marginBottom: "5px",
+                border: errors.name ? "1px solid red" : "1px solid #ccc",
+              }}
             />
+
+            {errors.name && (
+              <span style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}>
+                {errors.name}
+              </span>
+            )}
             <input
               type="number"
+              min={0}
+              max={100}
               placeholder="Idade"
               value={age}
-              onChange={(e) => setAge(e.target.value)}
-              style={{ width: "94%", padding: "8px", marginBottom: "10px" }}
+              onChange={(e) => {
+                setAge(e.target.value);
+                setErrors((prev: any) => ({ ...prev, age: "" }));
+              }}
+              style={{
+                width: "94%",
+                padding: "8px",
+                marginBottom: "5px",
+                border: errors.age ? "1px solid red" : "1px solid #ccc",
+              }}
             />
+
+            {errors.age && (
+              <span style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}>
+                {errors.age}
+              </span>
+            )}
           </div>
-          <div
-            style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
-          >
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
             <button
               onClick={onClose}
               style={{
@@ -89,6 +164,7 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
                 borderRadius: "5px",
                 cursor: "pointer",
               }}
+              disabled={loading}
             >
               Cancelar
             </button>
@@ -102,8 +178,9 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
                 borderRadius: "5px",
                 cursor: "pointer",
               }}
+              disabled={loading}
             >
-              Salvar
+              {loading ? "Salvando..." : "Salvar"}
             </button>
           </div>
         </div>
@@ -113,7 +190,11 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
         <ModalGlobal
           message={message}
           success={success}
-          onClose={() => setShowMessage(false)}
+          onClose={() => {
+            setShowMessage(false);
+            onSuccess();
+            onClose();
+          }}
         />
       )}
     </>

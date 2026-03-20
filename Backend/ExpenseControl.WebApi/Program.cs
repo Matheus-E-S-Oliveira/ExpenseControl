@@ -58,6 +58,9 @@ namespace ExpenseControl.WebApi
             builder.Services.AddScoped<ITransactionService, TransactionService>();
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
+            builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
             builder.Services.AddCors(options =>

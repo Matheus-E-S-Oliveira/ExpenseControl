@@ -32,7 +32,7 @@ namespace ExpenseControl.WebApi.Infraestructure.Repositories
 
         public async Task<IEnumerable<Person>> GetAllAsync()
         {
-            return await context.Persons.ToListAsync();
+            return await context.Persons.OrderBy(x => x.Name).ToListAsync();
         }
 
         public async Task<Person?> GetByIdAsync(Guid id)

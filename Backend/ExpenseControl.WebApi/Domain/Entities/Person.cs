@@ -10,6 +10,10 @@ namespace ExpenseControl.WebApi.Domain.Entities
 
         public int Age { get; private set; }
 
+        public DateTime? CreatedAt { get; private set; }
+
+        public DateTime? UpdatedAt { get; private set; }
+
         [JsonIgnore]
         public virtual ICollection<Transaction> Transactions { get; set; } = [];
 
@@ -18,7 +22,8 @@ namespace ExpenseControl.WebApi.Domain.Entities
             return new Person
             {
                 Name = name,
-                Age = age
+                Age = age,
+                CreatedAt = DateTime.Now,
             };
         }
 
@@ -26,6 +31,7 @@ namespace ExpenseControl.WebApi.Domain.Entities
         {
             this.Name = name;
             this.Age = age;
+            this.UpdatedAt = DateTime.Now;
 
             return this;
         }

@@ -13,6 +13,10 @@ namespace ExpenseControl.WebApi.Domain.Entities
 
         public TransactionType Type { get; private set; }
 
+        public DateTime? CreatedAt { get; private set; }
+
+        public DateTime? UpdatedAt { get; private set; }
+
         public Guid PersonId { get; private set; }
 
         [JsonIgnore]
@@ -31,7 +35,8 @@ namespace ExpenseControl.WebApi.Domain.Entities
                 CategoryId = categoryId,
                 Description = description,
                 Value = value,
-                Type = type
+                Type = type,
+                CreatedAt = DateTime.UtcNow
             };
         }
     }

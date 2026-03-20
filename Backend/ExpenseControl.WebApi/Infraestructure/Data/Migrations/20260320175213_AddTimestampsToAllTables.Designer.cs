@@ -3,6 +3,7 @@ using System;
 using ExpenseControl.WebApi.Infraestructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseControl.WebApi.Infraestructure.Data.Migrations
 {
     [DbContext(typeof(ExpenseControlContext))]
-    partial class ExpenseControlContextModelSnapshot : ModelSnapshot
+    [Migration("20260320175213_AddTimestampsToAllTables")]
+    partial class AddTimestampsToAllTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -10,9 +10,12 @@ export default function MainLayout({ children }: Props) {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        height: "100vh",
+        padding: "20px",
         display: "flex",
         flexDirection: "column",
+        overflow: "auto",
+        boxSizing: 'border-box',
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       }}
     >
@@ -22,7 +25,7 @@ export default function MainLayout({ children }: Props) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: "20px",
+          
         }}
       >
         {children}

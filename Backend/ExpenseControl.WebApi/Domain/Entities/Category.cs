@@ -11,6 +11,11 @@ namespace ExpenseControl.WebApi.Domain.Entities
 
         public CategoryPurpose Purpose { get; private set; }
 
+        public DateTime? CreatedAt { get; private set; }
+
+        public DateTime? UpdatedAt { get; private set; }
+
+
         [JsonIgnore]
         public virtual ICollection<Transaction> Transactions { get; set; } = [];
 
@@ -19,7 +24,8 @@ namespace ExpenseControl.WebApi.Domain.Entities
             return new Category
             {
                 Description = description,
-                Purpose = purpose
+                Purpose = purpose,
+                CreatedAt = DateTime.UtcNow
             };
         }
 
@@ -27,6 +33,7 @@ namespace ExpenseControl.WebApi.Domain.Entities
         {
             this.Description = description;
             this.Purpose = purpose;
+            this.UpdatedAt = DateTime.UtcNow;
 
             return this;
         }

@@ -36,6 +36,16 @@ namespace ExpenseControl.WebApi.Infraestructure.Data.Configurations
                 .WithMany(x => x.Transactions)
                 .HasForeignKey(x => x.CategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(p => p.CreatedAt)
+                 .HasColumnType("datetime(6)")
+                 .ValueGeneratedOnAdd()
+                 .IsRequired(false);
+
+            builder.Property(p => p.UpdatedAt)
+                 .HasColumnType("datetime(6)")
+                 .ValueGeneratedOnAddOrUpdate()
+                 .IsRequired(false);
         }
     }
 }

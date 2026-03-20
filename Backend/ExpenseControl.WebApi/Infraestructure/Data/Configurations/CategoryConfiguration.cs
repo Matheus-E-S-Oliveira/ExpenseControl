@@ -26,6 +26,16 @@ namespace ExpenseControl.WebApi.Infraestructure.Data.Configurations
                 .HasColumnName("purpose")
                 .HasDefaultValue(CategoryPurpose.None)
                 .IsRequired();
+
+            builder.Property(p => p.CreatedAt)
+                 .HasColumnType("datetime(6)")
+                 .ValueGeneratedOnAdd()
+                 .IsRequired(false);
+
+            builder.Property(p => p.UpdatedAt)
+                 .HasColumnType("datetime(6)")
+                 .ValueGeneratedOnAddOrUpdate()
+                 .IsRequired(false);
         }
     }
 }

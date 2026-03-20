@@ -1,5 +1,4 @@
-import { FiEdit, FiTrash2, FiEye } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 type Props = {
   id: string;
@@ -51,9 +50,9 @@ export default function PersonCard({ id, name, age, onDelete, onEdit }: Props) {
         >
           <FiTrash2 size={18} color="#FF4D4F" />
         </button>
-        <Link to={`/person/details/${id}`}>
+        {/* <Link to={`/person/details/${id}`}>
           <FiEye size={18} color="#40A9FF" cursor={"pointer"} />
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

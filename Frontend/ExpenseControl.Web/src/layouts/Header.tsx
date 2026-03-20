@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 const menuItems = [
   { name: 'Dashboard', path: '/' },
-  { name: 'Pessoas', path: '/person' },
+  { name: 'Pessoas', path: '/persons' },
   { name: 'Categorias', path: '/categories' },
   { name: 'Transações', path: '/transactions' },
 ];
