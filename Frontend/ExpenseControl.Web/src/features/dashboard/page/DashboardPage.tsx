@@ -156,10 +156,10 @@ export default function DashboardPage() {
                         style={{
                           fontWeight: "bold",
                           textAlign: "end",
-                          color: t.type === 1 ? "#10b981" : "#ef4444",
+                          color: t.type === 2 ? "#10b981" : "#ef4444",
                         }}
                       >
-                        {t.type === 1
+                        {t.type === 2
                           ? `+ R$ ${t.value.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                           : `- R$ ${t.value.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                       </span>
@@ -173,7 +173,7 @@ export default function DashboardPage() {
                           textAlign: "center",
                         }}
                       >
-                        {t.type === 1 ? "Receita" : "Despesa"}
+                        {t.type === 2 ? "Receita" : "Despesa"}
                       </span>
                       {/* Valor com estilo condicional */}
                     </li>
