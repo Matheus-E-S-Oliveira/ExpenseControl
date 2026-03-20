@@ -46,7 +46,11 @@ namespace ExpenseControl.WebApi.Infraestructure.Repositories
 
             if (person is null) return null;
 
-            context.Persons.Update(person);
+            var personUpdate = person.Update(
+                name: name,
+                age: age);
+
+            context.Persons.Update(personUpdate);
             await context.SaveChangesAsync();
 
             return person;
