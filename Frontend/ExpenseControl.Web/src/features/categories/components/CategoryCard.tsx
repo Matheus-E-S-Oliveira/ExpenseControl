@@ -1,60 +1,80 @@
-
+/**
+ * CategoryCard - Card para exibição de categoria
+ *
+ * Funcionalidades:
+ * - Mostra a descrição da categoria
+ * - Mostra a finalidade da categoria (Despesa, Receita ou Ambos)
+ *
+ * Props:
+ * - id: string (não utilizado atualmente, mas pode ser usado para links futuros)
+ * - description: string
+ * - purpose: number (1 = Despesa, 2 = Receita, 3 = Ambos)
+ *
+ * Layout:
+ * - Card branco com sombra e bordas arredondadas
+ * - Descrição em negrito
+ * - Finalidade em fonte menor e cor cinza
+ */
 type Props = {
-    id: string;
-    description: string;
-    purpose: number;
+  id: string;
+  description: string;
+  purpose: number;
 };
 
 const getPurposeLabel = (purpose: number) => {
-    switch (purpose) {
-        case 1: return "Despesa";
-        case 2: return "Receita";
-        case 3: return "Ambos";
-    }
+  switch (purpose) {
+    case 1:
+      return "Despesa";
+    case 2:
+      return "Receita";
+    case 3:
+      return "Ambos";
+  }
 };
 
 export default function CategoryCard({
-    // id,
-    description,
-    purpose,
+  // id,
+  description,
+  purpose,
 }: Props) {
-    return (
+  return (
+    <div
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 8px",
+        padding: "15px",
+        width: "350px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "15px",
+      }}
+    >
+      <div style={{ flex: 1, marginRight: "10px", overflow: "hidden" }}>
         <div
-            style={{
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-                boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 8px",
-                padding: "15px",
-                width: "350px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "15px",
-            }}
+          style={{
+            fontWeight: "bold",
+            fontSize: "16px",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
         >
-            <div style={{ flex: 1, marginRight: "10px", overflow: "hidden" }}>
-                <div
-                    style={{
-                        fontWeight: "bold",
-                        fontSize: "16px",
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                    }}
-                >
-                    {description}
-                </div>
+          {description}
+        </div>
 
-                <div style={{ fontSize: "14px", color: "#666" }}>
-                    {getPurposeLabel(purpose)}
-                </div>
-            </div>
+        <div style={{ fontSize: "14px", color: "#666" }}>
+          {getPurposeLabel(purpose)}
+        </div>
+      </div>
 
-            {/* <div style={{ display: "flex", gap: "8px" }}>
+      {/* Possível ação futura para ver detalhes da categoria */}
+      {/* <div style={{ display: "flex", gap: "8px" }}>
                 <Link to={`/category/details/${id}`}>
                     <FiEye size={18} color="#40A9FF" cursor="pointer" />
                 </Link>
             </div> */}
-        </div>
-    );
+    </div>
+  );
 }

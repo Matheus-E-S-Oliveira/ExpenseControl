@@ -7,8 +7,29 @@ import PersonFormModal from "../components/PersonFormModal";
 import ConfirmationModal from "../../../components/ConfirmationModal";
 import ModalGlobal from "../../../components/ModalGlobal";
 
+/**
+ * Tipo Person usado no estado local
+ */
 type Person = { id: string; name: string; age: number };
 
+/**
+ * PersonsListPage - Página de listagem e gerenciamento de pessoas
+ *
+ * Lógica:
+ * - Busca pessoas usando getPersons() ao montar o componente
+ * - Permite filtrar por nome e idade via PersonFilterCard
+ * - Permite criar e editar pessoas via PersonFormModal
+ * - Permite excluir pessoas com confirmação via ConfirmationModal
+ * - Exibe mensagens de sucesso/erro via ModalGlobal
+ *
+ * Estados principais:
+ * - persons: lista de pessoas
+ * - activePerson: pessoa atualmente sendo editada
+ * - showFormModal: controla exibição do modal de cadastro/edição
+ * - confirmId: id da pessoa a ser excluída (abre modal de confirmação)
+ * - message / showMessage / success: mensagem global após ações
+ * - hasFilter: indica se algum filtro está aplicado
+ */
 export default function PersonsListPage() {
   const [persons, setPersons] = useState<Person[]>([]);
   const [activePerson, setActivePerson] = useState<Person | null>(null);
@@ -19,6 +40,9 @@ export default function PersonsListPage() {
   const [success, setSuccess] = useState(true);
   const [hasFilter, setHasFilter] = useState(false);
 
+  /**
+   * Busca pessoas da API e aplica filtros opcionais
+   */
   const fetchPersons = async (filters?: { name: string; age: string }) => {
     const response = await getPersons();
     let filtered = response.data;
@@ -30,15 +54,16 @@ export default function PersonsListPage() {
         (p: { name: string; age: number }) =>
           (!filters.name ||
             p.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-          (!filters.age || p.age === Number(filters.age))
+          (!filters.age || p.age === Number(filters.age)),
       );
     }
     setPersons(filtered);
   };
 
-  // Exclusão
+  /** Define id da pessoa a ser excluída, abre modal de confirmação */
   const handleDeleteClick = (id: string) => setConfirmId(id);
 
+  /** Confirma exclusão da pessoa e atualiza lista */
   const handleConfirmDelete = async () => {
     if (!confirmId) return;
 
@@ -57,18 +82,22 @@ export default function PersonsListPage() {
     }
   };
 
+  /** Cancela exclusão */
   const handleCancelDelete = () => setConfirmId(null);
 
+  /** Abre modal para edição */
   const handleEdit = (person: Person) => {
     setActivePerson(person);
     setShowFormModal(true);
   };
 
+  /** Abre modal para criação */
   const handleNew = () => {
     setActivePerson(null);
     setShowFormModal(true);
   };
 
+  // Busca inicial de pessoas ao montar o componente
   useEffect(() => {
     fetchPersons();
   }, []);
@@ -84,12 +113,14 @@ export default function PersonsListPage() {
           width: "100%",
         }}
       >
+        {/* Filtros e botão de criação */}
         <PersonFilterCard
           onSearch={fetchPersons}
           onClear={() => fetchPersons()}
           onNew={handleNew}
         />
 
+        {/* Modal de cadastro/edição */}
         {showFormModal && (
           <PersonFormModal
             person={activePerson || undefined}
@@ -101,6 +132,7 @@ export default function PersonsListPage() {
           />
         )}
 
+        {/* Lista de pessoas */}
         <div
           style={{
             display: "flex",

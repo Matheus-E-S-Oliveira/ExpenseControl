@@ -1,3 +1,19 @@
+/**
+ * PersonFilterCard - Card de filtros e ações para lista de pessoas
+ *
+ * Props:
+ * - onSearch: função chamada ao clicar em Buscar, recebe filtros { name, age }
+ * - onClear: função chamada ao clicar em Limpar, reseta inputs e filtros
+ * - onNew: função chamada ao clicar em Novo, abre modal de criação
+ *
+ * Lógica:
+ * - Mantém estados locais para `name` e `age`
+ * - `handleSearch` envia os filtros para o componente pai
+ * - `handleClear` limpa os inputs e chama `onClear`
+ * - Botões estilizados com cores distintas e ícones (react-icons/fi)
+ * - Inputs são responsivos e alinhados em flex wrap
+ * - Layout com caixa branca, bordas arredondadas, sombra e espaçamento interno
+ */
 import { useState } from "react";
 import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 
@@ -31,7 +47,7 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
         gap: "15px",
         width: "100%",
         marginTop: "40px",
-        boxSizing: 'border-box'
+        boxSizing: "border-box",
       }}
     >
       <h2 style={{ margin: 0 }}>Lista de Pessoas</h2>
@@ -81,7 +97,7 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
             display: "flex",
             gap: "5px",
             fontSize: "15px",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
         >
           <FiSearch /> Buscar
@@ -98,7 +114,7 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
             display: "flex",
             gap: "5px",
             fontSize: "15px",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
         >
           <FiX /> Limpar
@@ -115,7 +131,7 @@ export default function PersonFilterCard({ onSearch, onClear, onNew }: Props) {
             display: "flex",
             gap: "5px",
             fontSize: "15px",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
         >
           <FiPlus /> Novo

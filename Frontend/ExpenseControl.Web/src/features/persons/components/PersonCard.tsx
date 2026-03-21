@@ -1,3 +1,20 @@
+/**
+ * PersonCard - Card individual de pessoa para listagem
+ *
+ * Props:
+ * - id: identificador único da pessoa
+ * - name: nome da pessoa
+ * - age: idade da pessoa
+ * - onDelete: função chamada ao clicar no ícone de excluir, recebe o id
+ * - onEdit: função opcional chamada ao clicar no ícone de editar, recebe objeto { id, name, age }
+ *
+ * Lógica:
+ * - Exibe nome e idade da pessoa
+ * - Ícones de ação para editar (azul) e excluir (vermelho)
+ * - Layout flex horizontal: texto à esquerda, ações à direita
+ * - Texto cortado com ellipsis se for muito longo
+ * - Caixa branca com bordas arredondadas, sombra e padding
+ */
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 type Props = {
@@ -50,9 +67,6 @@ export default function PersonCard({ id, name, age, onDelete, onEdit }: Props) {
         >
           <FiTrash2 size={18} color="#FF4D4F" />
         </button>
-        {/* <Link to={`/person/details/${id}`}>
-          <FiEye size={18} color="#40A9FF" cursor={"pointer"} />
-        </Link> */}
       </div>
     </div>
   );

@@ -12,15 +12,40 @@ type Props = {
   onNew: () => void;
 };
 
-export default function TransactionFilterCard({ onSearch, onClear, onNew }: Props) {
-  const [description, setDescription] = useState("");
-  const [type, setType] = useState<number | "">("");
-  const [personName, setPersonName] = useState("");
-  const [category, setCategory] = useState("");
+/**
+ * TransactionFilterCard
+ *
+ * Componente de filtro para a listagem de transações.
+ *
+ * Funcionalidades:
+ * - Permite filtrar transações por:
+ *   - descrição
+ *   - tipo (Despesa / Receita / Todos)
+ *   - nome da pessoa
+ *   - categoria
+ * - Permite limpar os filtros
+ * - Permite acionar criação de nova transação
+ *
+ * Props:
+ * @param onSearch Função chamada ao clicar em "Buscar", recebendo os filtros
+ * @param onClear Função chamada ao clicar em "Limpar"
+ * @param onNew Função chamada ao clicar em "Nova"
+ */
+export default function TransactionFilterCard({
+  onSearch,
+  onClear,
+  onNew,
+}: Props) {
+  const [description, setDescription] = useState(""); // filtro descrição
+  const [type, setType] = useState<number | "">(""); // filtro tipo de transação
+  const [personName, setPersonName] = useState(""); // filtro nome da pessoa
+  const [category, setCategory] = useState(""); // filtro categoria
 
+  // Executa a busca com os filtros atuais
   const handleSearch = () =>
     onSearch({ description, type, personName, category });
 
+  // Limpa todos os filtros
   const handleClear = () => {
     setDescription("");
     setType("");
@@ -42,32 +67,47 @@ export default function TransactionFilterCard({ onSearch, onClear, onNew }: Prop
         gap: "15px",
         width: "100%",
         marginTop: "40px",
-        boxSizing: 'border-box'
+        boxSizing: "border-box",
       }}
     >
       <h2 style={{ margin: 0 }}>Lista de Transações</h2>
 
-      {/* Campos */}
+      {/* Campos de filtro */}
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <input
           placeholder="Descrição"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          style={{ flex: 1, padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
+          style={{
+            flex: 1,
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
         />
 
         <input
           placeholder="Pessoa"
           value={personName}
           onChange={(e) => setPersonName(e.target.value)}
-          style={{ flex: 1, padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
+          style={{
+            flex: 1,
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
         />
 
         <input
           placeholder="Categoria"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          style={{ flex: 1, padding: "8px", borderRadius: "5px", border: "1px solid #ccc" }}
+          style={{
+            flex: 1,
+            padding: "8px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
         />
 
         <select

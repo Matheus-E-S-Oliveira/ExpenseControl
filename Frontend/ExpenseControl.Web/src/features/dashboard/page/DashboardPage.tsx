@@ -1,18 +1,44 @@
 import MainLayout from "../../../layouts/MainLayout";
 import useDashboard from "../hook/useDashboard";
 
+/**
+ * DashboardPage - Página principal com resumo financeiro da aplicação
+ *
+ * Lógica:
+ * - Utiliza hook `useDashboard` para buscar dados da API:
+ *   - totalIncome, totalExpenses, balance
+ *   - pessoas cadastradas (data.people)
+ *   - categorias (data.categories)
+ *   - transações recentes (data.recentTransactions)
+ * - Mostra estados de loading e error usando MainLayout
+ * - Exibe cards com resumo financeiro e listas detalhadas
+ * - Cores e estilos condicionais baseados nos valores (positivo/negativo)
+ *
+ * Observações:
+ * - Layout dividido em duas colunas:
+ *   - Coluna A: Resumo geral e Pessoas
+ *   - Coluna B: Categorias e Transações recentes
+ * - Cada seção utiliza box branco com borda, sombra e cantos arredondados
+ * - Formatação de valores monetários em Real com 2 casas decimais
+ */
 export default function DashboardPage() {
-  const { data, loading, error } = useDashboard();
+  const { data } = useDashboard();
 
-  if (loading) return <MainLayout>Loading...</MainLayout>;
-  if (error) return <MainLayout>{error}</MainLayout>;
+  // Exibe mensagens de loading ou erro dentro do layout principal
   if (!data) return null;
 
+  // Define cor do saldo com base no valor
   const balanceColor =
     data.balance > 0 ? "#10b981" : data.balance < 0 ? "#ef4444" : "#f59e0b";
 
+  // Estilo para os cards de resumo financeiro (Receita, Despesa, Saldo)
   const cardStyle = (type: "income" | "expense" | "balance") => {
-    let borderColor = type === "income" ? "#10b981" : type === "expense" ? "#ef4444" : "#f59e0b";
+    let borderColor =
+      type === "income"
+        ? "#10b981"
+        : type === "expense"
+          ? "#ef4444"
+          : "#f59e0b";
     return {
       flex: 1,
       minWidth: 150,
@@ -28,6 +54,7 @@ export default function DashboardPage() {
     };
   };
 
+  // Estilo para container de listas (Pessoas, Categorias, Transações)
   const groupStyle = {
     background: "#fff",
     padding: "12px 16px",
@@ -37,6 +64,7 @@ export default function DashboardPage() {
     border: "1px solid #f1f5f9",
   };
 
+  // Estilo para cada item dentro das listas
   const groupItemStyle = {
     background: "rgb(254, 252, 232)",
     padding: "8px 12px",
@@ -51,12 +79,27 @@ export default function DashboardPage() {
     listStyle: "none" as const,
   };
 
-  const groupTitleStyle = { fontSize: 14, fontWeight: 600, marginBottom: 6, color: "#334155" };
+  const groupTitleStyle = {
+    fontSize: 14,
+    fontWeight: 600,
+    marginBottom: 6,
+    color: "#334155",
+  };
 
   return (
     <MainLayout>
-      <div style={{ display: "flex", flexDirection: "column", marginTop: 20, marginBottom: 30, width: "100%" }}>
-        <h1 style={{ fontSize: 28, color: "#333", marginBottom: 20 }}>Dashboard</h1>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: 20,
+          marginBottom: 30,
+          width: "100%",
+        }}
+      >
+        <h1 style={{ fontSize: 28, color: "#333", marginBottom: 20 }}>
+          Dashboard
+        </h1>
 
         <div
           style={{
@@ -66,118 +109,272 @@ export default function DashboardPage() {
             minHeight: 400,
           }}
         >
-          {/* Column A */}
+          {/* Coluna A: Resumo Geral + Pessoas */}
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {/* General Summary */}
-            <div style={{ backgroundColor: "#fff", padding: 20, borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.1)" }}>
+            {/* Resumo Geral */}
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 12,
+                boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+              }}
+            >
               <h2 style={{ marginTop: 0 }}>Resumo Geral</h2>
               <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                {/* Card Receita */}
                 <div style={cardStyle("income")}>
                   <h3 style={{ color: "#10b981", margin: 0 }}>Receita Total</h3>
                   <p style={{ fontWeight: "bold", margin: "6px 0" }}>
-                    R$ {data.totalIncome.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    R${" "}
+                    {data.totalIncome.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
+                {/* Card Despesa */}
                 <div style={cardStyle("expense")}>
                   <h3 style={{ color: "#ef4444", margin: 0 }}>Despesa Total</h3>
                   <p style={{ fontWeight: "bold", margin: "6px 0" }}>
-                    R$ {data.totalExpenses.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    R${" "}
+                    {data.totalExpenses.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
+                {/* Card Saldo */}
                 <div style={cardStyle("balance")}>
                   <h3 style={{ color: balanceColor, margin: 0 }}>Saldo</h3>
-                  <p style={{ fontWeight: "bold", margin: "6px 0", color: balanceColor }}>
-                    R$ {data.balance.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      margin: "6px 0",
+                      color: balanceColor,
+                    }}
+                  >
+                    R${" "}
+                    {data.balance.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* People */}
-            <div style={{ backgroundColor: "#fff", padding: 20, borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.1)" }}>
+            {/* Pessoas */}
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 12,
+                boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+              }}
+            >
               <h2 style={{ marginTop: 0, marginBottom: 12 }}>Pessoas</h2>
               <p>Total de pessoas registradas: {data.people.length}</p>
               <div style={groupStyle}>
                 <h3 style={groupTitleStyle}>Situação por pessoa</h3>
                 <ul style={{ margin: 0, padding: 0 }}>
-                  {data.people.map((p, i) => (
-                    <li key={i} style={{ ...groupItemStyle, justifyContent: 'space-between', flexWrap: 'wrap' }}>
-                      <span>{p.name} ({p.age} anos)</span>
-                      <span>Receita: R$ {p.totalIncome.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span>Gastos: R$ {p.totalExpenses.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span>Saldo: R$ {p.balance.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  {data.people.length > 0 ? (
+                    data.people.map((p, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          ...groupItemStyle,
+                          justifyContent: "space-between",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        {/* Nome e idade */}
+                        <span>
+                          {p.name} ({p.age} anos)
+                        </span>
+                        {/* Valores financeiros */}
+                        <span>
+                          Receita: R${" "}
+                          {p.totalIncome.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span>
+                          Gastos: R${" "}
+                          {p.totalExpenses.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span>
+                          Saldo: R${" "}
+                          {p.balance.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <li
+                      style={{
+                        ...groupItemStyle,
+                        justifyContent: "center",
+                        gridTemplateColumns: "1fr",
+                        color: "#999",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      Nenhum dado cadastrado no momento
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Column B */}
+          {/* Coluna B: Categorias + Transações Recentes */}
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {/* Categories */}
-            <div style={{ backgroundColor: "#fff", padding: 20, borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.1)" }}>
+            {/* Categorias */}
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 12,
+                boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+              }}
+            >
               <h2 style={{ marginTop: 0, marginBottom: 12 }}>Categorias</h2>
-              <p>Total de pessoas registradas: {data.categories.length}</p>
+              <p>Total de categorias registradas: {data.categories.length}</p>
               <div style={groupStyle}>
                 <ul style={{ margin: 0, padding: 0 }}>
-                  {data.categories.map((c, i) => (
-                    <li key={i} style={{ ...groupItemStyle, gridTemplateColumns: "3fr 1fr 1fr 1fr" }}>
-                      <span>{c.description}</span>
-                      <span>Receita: R$ {c.totalIncome.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span>Gastos: R$ {c.totalExpenses.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span>Saldo: R$ {c.balance.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  {data.categories.length > 0 ? (
+                    data.categories.map((c, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          ...groupItemStyle,
+                          gridTemplateColumns: "3fr 1fr 1fr 1fr",
+                        }}
+                      >
+                        <span>{c.description}</span>
+                        <span>
+                          Receita: R${" "}
+                          {c.totalIncome.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span>
+                          Gastos: R${" "}
+                          {c.totalExpenses.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                        <span>
+                          Saldo: R${" "}
+                          {c.balance.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <li
+                      style={{
+                        ...groupItemStyle,
+                        justifyContent: "center",
+                        gridTemplateColumns: "1fr",
+                        color: "#999",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      Nenhum dado cadastrado no momento
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>
 
-            {/* Recent Transactions */}
-            <div style={{ backgroundColor: "#fff", padding: 20, borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.1)" }}>
-              <h2 style={{ marginTop: 0, marginBottom: 12 }}>Transações Recentes</h2>
+            {/* Transações Recentes */}
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 12,
+                boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+              }}
+            >
+              <h2 style={{ marginTop: 0, marginBottom: 12 }}>
+                Transações Recentes
+              </h2>
               <div style={groupStyle}>
                 <ul style={{ margin: 0, padding: 0 }}>
-                  {(data.recentTransactions || []).map((t, i) => (
+                  {(data.recentTransactions || []).length > 0 ? (
+                    data.recentTransactions.map((t, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          ...groupItemStyle,
+                          display: "grid",
+                          gridTemplateColumns: "1fr 2fr 1fr 1fr",
+                          gap: "12px",
+                          alignItems: "center",
+                        }}
+                      >
+                        {/* Autor da transação */}
+                        <span>Autor: {t.personName}</span>
+                        {/* Descrição */}
+                        <span>{t.description}</span>
+                        {/* Valor com sinal e cor condicional */}
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            textAlign: "end",
+                            color: t.type === 2 ? "#10b981" : "#ef4444",
+                          }}
+                        >
+                          {t.type === 2
+                            ? `+ R$ ${t.value.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}`
+                            : `- R$ ${t.value.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}`}
+                        </span>
+                        {/* Tipo da transação */}
+                        <span
+                          style={{
+                            backgroundColor: "#f0f0f0",
+                            padding: "2px 8px",
+                            borderRadius: "6px",
+                            fontWeight: 600,
+                            display: "inline-block",
+                            textAlign: "center",
+                          }}
+                        >
+                          {t.type === 2 ? "Receita" : "Despesa"}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
                     <li
-                      key={i}
                       style={{
                         ...groupItemStyle,
-                        display: "grid",
-                        gridTemplateColumns: "1fr 2fr 1fr 1fr",
-                        gap: "12px",
-                        alignItems: "center",
+                        justifyContent: "center",
+                        gridTemplateColumns: "1fr",
+                        color: "#999",
+                        fontStyle: "italic",
                       }}
                     >
-                      <span>Autor: {t.personName}</span>
-                      <span>{t.description}</span>
-                      {/* Breadcrumb-like */}
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textAlign: "end",
-                          color: t.type === 2 ? "#10b981" : "#ef4444",
-                        }}
-                      >
-                        {t.type === 2
-                          ? `+ R$ ${t.value.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                          : `- R$ ${t.value.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                      </span>
-                      <span
-                        style={{
-                          backgroundColor: "#f0f0f0",
-                          padding: "2px 8px",
-                          borderRadius: "6px",
-                          fontWeight: 600,
-                          display: "inline-block",
-                          textAlign: "center",
-                        }}
-                      >
-                        {t.type === 2 ? "Receita" : "Despesa"}
-                      </span>
-                      {/* Valor com estilo condicional */}
+                      Nenhum dado cadastrado no momento
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>

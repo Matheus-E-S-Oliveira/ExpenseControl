@@ -76,18 +76,12 @@ export default function TransactionCard({
 
       {/* Valor */}
       <div style={{ fontSize: "14px" }}>
-        Valor:{" "}
-        <strong style={{ color }}>
-          R$ {value.toFixed(2)}
-        </strong>
+        Valor: <strong style={{ color }}>R$ {value.toFixed(2)}</strong>
       </div>
 
       {/* Tipo (reforçado visualmente) */}
       <div style={{ fontSize: "14px" }}>
-        Tipo:{" "}
-        <strong style={{ color }}>
-          {getTypeLabel(type)}
-        </strong>
+        Tipo: <strong style={{ color }}>{getTypeLabel(type)}</strong>
       </div>
 
       {/* Pessoa */}

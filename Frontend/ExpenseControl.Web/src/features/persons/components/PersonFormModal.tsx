@@ -1,3 +1,24 @@
+/**
+ * PersonFormModal - Modal para criação e edição de pessoas
+ *
+ * Props:
+ * - onClose: função chamada ao fechar o modal
+ * - onSuccess: função chamada após salvar com sucesso
+ * - person: objeto opcional com dados da pessoa (para edição)
+ *
+ * Lógica:
+ * - Mantém estados locais para `name`, `age`, `errors`, `loading`, `message` e `success`
+ * - `handleSubmit` envia dados para API:
+ *   - Criação via createPerson se `person` não existir
+ *   - Edição via updatePerson se `person` existir
+ *   - Valida campos antes de enviar
+ * - `validateForm` verifica:
+ *   - Nome obrigatório e <= 200 caracteres
+ *   - Idade obrigatória, > 0 e <= 120
+ * - Mostra erros abaixo dos inputs
+ * - Mostra ModalGlobal para mensagens de sucesso ou erro
+ * - Inputs com estilização inline e feedback visual de erro
+ */
 import { useState } from "react";
 import { createPerson, updatePerson } from "../services/personService";
 import ModalGlobal from "../../../components/ModalGlobal";
@@ -17,6 +38,7 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<any>({});
 
+  /** Envia dados para API após validação */
   const handleSubmit = async () => {
     setLoading(true);
 
@@ -47,7 +69,6 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
       setMessage(responseMessage);
       setSuccess(true);
       setShowMessage(true);
-
     } catch (error: any) {
       setMessage(error?.response?.data?.message || "Erro ao salvar!");
       setSuccess(false);
@@ -57,6 +78,7 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
     }
   };
 
+  /** Valida os campos do formulário */
   const validateForm = () => {
     const newErrors: any = {};
 
@@ -125,14 +147,16 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
             />
 
             {errors.name && (
-              <span style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}>
+              <span
+                style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}
+              >
                 {errors.name}
               </span>
             )}
             <input
               type="number"
               min={0}
-              max={100}
+              max={120}
               placeholder="Idade"
               value={age}
               onChange={(e) => {
@@ -148,12 +172,16 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
             />
 
             {errors.age && (
-              <span style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}>
+              <span
+                style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}
+              >
                 {errors.age}
               </span>
             )}
           </div>
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
+          >
             <button
               onClick={onClose}
               style={{
@@ -186,6 +214,7 @@ export default function PersonFormModal({ onClose, onSuccess, person }: Props) {
         </div>
       </div>
 
+      {/* Modal global para mensagens de sucesso/erro */}
       {showMessage && (
         <ModalGlobal
           message={message}
