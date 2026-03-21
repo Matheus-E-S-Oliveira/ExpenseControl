@@ -57,4 +57,7 @@ O **ExpenseControl** é uma aplicação full-stack para gerenciar gastos e recei
 
 ## Observações
 
-* Todas as datas são armazenad
+* Todas as datas são armazenadas em UTC.
+* Menores de 18 anos só podem registrar despesas.
+* Categorias devem ser compatíveis com o tipo da transação.
+* Valores máximos de transação: até 1 milhão.
